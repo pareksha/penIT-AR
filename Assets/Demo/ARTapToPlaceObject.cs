@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ARTapToPlaceObject : MonoBehaviour {
     public GameObject placementIndicator;
@@ -66,5 +67,9 @@ public class ARTapToPlaceObject : MonoBehaviour {
             resetButton.gameObject.SetActive(false);
             imagePlaced = false;
         }
+    }
+
+    public void loadGallery() {
+        SceneManager.LoadScene("GalleryScene");
     }
 }
