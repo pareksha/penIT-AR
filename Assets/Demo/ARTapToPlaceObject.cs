@@ -11,7 +11,8 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public GameObject objectToPlace;
     public GameObject objectToPlace1;
     public GameObject objectToPlace2;
-    public Button resetButton;
+    public GameObject navbarBottom;
+    public GameObject sliderPanel;
 
     private ARRaycastManager raycastManager;
     private Pose placementPose;
@@ -20,9 +21,17 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private GameObject imageGameObject;
     private int templateid = ChangeTemplate.templateId;
 
+    void setSlidersInactive() {
+        Slider[] children = sliderPanel.GetComponentsInChildren<Slider>();
+        foreach (Slider child in children) {
+            child.gameObject.SetActive(false);
+        }
+    }
+
     void Start() {
         raycastManager = FindObjectOfType<ARRaycastManager>();
-        resetButton.gameObject.SetActive(false);
+        navbarBottom.SetActive(false);
+        setSlidersInactive();
     }
 
     void Update() {
@@ -31,7 +40,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
 
         if (placementPoseIsValid && !imagePlaced && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
             PlaceObject();
-            resetButton.gameObject.SetActive(true);
+            navbarBottom.SetActive(true);
             imagePlaced = true;
         }
     }
@@ -39,7 +48,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private void PlaceObject() {
         templateid = ChangeTemplate.templateId;
         Debug.Log(templateid);
-        switch(templateid){
+        switch (templateid) {
             case 0:
                 imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
                 break;
@@ -47,7 +56,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
                 imageGameObject = Instantiate(objectToPlace1, placementPose.position, placementPose.rotation);
                 break;
         }
-        
+
     }
 
     private void UpdatePlacementIndicator() {
@@ -77,12 +86,18 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public void resetImage() {
         if (imagePlaced) {
             Destroy(imageGameObject);
-            resetButton.gameObject.SetActive(false);
+            navbarBottom.SetActive(false);
+            setSlidersInactive();
             imagePlaced = false;
         }
     }
 
     public void loadGallery() {
         SceneManager.LoadScene("GalleryScene");
+    }
+
+    public void toggleSlider(GameObject slider) {
+        bool sliderActive = slider.activeInHierarchy;
+        slider.SetActive(!sliderActive);
     }
 }
