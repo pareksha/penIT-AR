@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class ARTapToPlaceObject : MonoBehaviour {
     public GameObject placementIndicator;
     public GameObject objectToPlace;
+    public GameObject objectToPlace1;
+    public GameObject objectToPlace2;
     public Button resetButton;
 
     private ARRaycastManager raycastManager;
@@ -16,6 +18,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private bool placementPoseIsValid = false;
     private bool imagePlaced = false;
     private GameObject imageGameObject;
+    private int templateid = ChangeTemplate.templateId;
 
     void Start() {
         raycastManager = FindObjectOfType<ARRaycastManager>();
@@ -34,7 +37,17 @@ public class ARTapToPlaceObject : MonoBehaviour {
     }
 
     private void PlaceObject() {
-        imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
+        templateid = ChangeTemplate.templateId;
+        Debug.Log(templateid);
+        switch(templateid){
+            case 0:
+                imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
+                break;
+            case 1:
+                imageGameObject = Instantiate(objectToPlace1, placementPose.position, placementPose.rotation);
+                break;
+        }
+        
     }
 
     private void UpdatePlacementIndicator() {
