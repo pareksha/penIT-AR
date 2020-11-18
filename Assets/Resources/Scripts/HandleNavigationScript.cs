@@ -22,10 +22,11 @@ public class HandleNavigationScript : MonoBehaviour, IPointerClickHandler
     }
 
     // Update is called once per frame
-    void update(){
+    void Update(){
     	if(Input.GetKeyDown(KeyCode.Escape)){
     		handleNavigation();
     	}
+    	Debug.Log("lets debug");
     }
 
     public void OnPointerClick(PointerEventData eventData){
