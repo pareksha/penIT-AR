@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ChangeTemplate : MonoBehaviour
 {
@@ -9,5 +10,6 @@ public class ChangeTemplate : MonoBehaviour
     // Start is called before the first frame update
     public void templateChange(int id){
     	templateId = id;
+    	SceneManager.LoadScene("ARScene");
     }
 }

@@ -7,10 +7,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class ARTapToPlaceObject : MonoBehaviour {
+    public Texture[] textures;
     public GameObject placementIndicator;
     public GameObject objectToPlace;
-    public GameObject objectToPlace1;
-    public GameObject objectToPlace2;
     public GameObject navbarBottom;
     public GameObject sliderPanel;
 
@@ -47,16 +46,9 @@ public class ARTapToPlaceObject : MonoBehaviour {
 
     private void PlaceObject() {
         templateid = ChangeTemplate.templateId;
-        Debug.Log(templateid);
-        switch (templateid) {
-            case 0:
-                imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
-                break;
-            case 1:
-                imageGameObject = Instantiate(objectToPlace1, placementPose.position, placementPose.rotation);
-                break;
-        }
-
+        objectToPlace.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = textures[templateid];
+        // GetComponent<Renderer>().material.mainTexture = textures[templateid];
+        imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
     }
 
     private void UpdatePlacementIndicator() {
