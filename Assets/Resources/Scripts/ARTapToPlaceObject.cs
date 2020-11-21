@@ -20,7 +20,13 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private GameObject imageGameObject;
     private int templateid = ChangeTemplate.templateId;
 
-    void setSlidersInactive() {
+    private void changeAlpha(Material mat, float alphaVal) {
+        Color oldColor = mat.color;
+        Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
+        mat.SetColor("_Color", newColor);
+    }
+
+    private void setSlidersInactive() {
         Slider[] children = sliderPanel.GetComponentsInChildren<Slider>();
         foreach (Slider child in children) {
             if (child.name == "ZoomSlider")
@@ -37,6 +43,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
         setSlidersInactive();
+        changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 1);
     }
 
     void Update() {
@@ -45,6 +52,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
 
         if (placementPoseIsValid && !imagePlaced && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
             PlaceObject();
+            changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 0);
             navbarBottom.SetActive(true);
             imagePlaced = true;
         }
@@ -84,6 +92,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public void resetImage() {
         if (imagePlaced) {
             Destroy(imageGameObject);
+            changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 1);
             navbarBottom.SetActive(false);
             setSlidersInactive();
             imagePlaced = false;
@@ -109,12 +118,6 @@ public class ARTapToPlaceObject : MonoBehaviour {
         Quaternion newRotation = new Quaternion();
         newRotation.eulerAngles = new Vector3(rot.x, value, rot.z);
         imageGameObject.GetComponent<Transform>().rotation = newRotation;
-    }
-
-    private void changeAlpha(Material mat, float alphaVal) {
-        Color oldColor = mat.color;
-        Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
-        mat.SetColor("_Color", newColor);
     }
 
     public void transparencyFunc(float value) {
