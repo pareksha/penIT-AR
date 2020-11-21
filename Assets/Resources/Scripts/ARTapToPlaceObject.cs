@@ -23,7 +23,12 @@ public class ARTapToPlaceObject : MonoBehaviour {
     void setSlidersInactive() {
         Slider[] children = sliderPanel.GetComponentsInChildren<Slider>();
         foreach (Slider child in children) {
-            child.value = 1.0f;
+            if (child.name == "ZoomSlider")
+                child.value = 1.0f;
+            else if (child.name == "TransparencySlider")
+                child.value = 100.0f;
+            else if (child.name == "RotateSlider")
+                child.value = 0.0f;
             child.gameObject.SetActive(false);
         }
     }
@@ -97,5 +102,12 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public void zoomFunc(float value) {
         Vector3 newScale = new Vector3(value, value, value);
         imageGameObject.GetComponent<Transform>().localScale = newScale;
+    }
+
+    public void rotateFunc(float value) {
+        Vector3 rot = imageGameObject.GetComponent<Transform>().rotation.eulerAngles;
+        Quaternion newRotation = new Quaternion();
+        newRotation.eulerAngles = new Vector3(rot.x, value, rot.z);
+        imageGameObject.GetComponent<Transform>().rotation = newRotation;
     }
 }
