@@ -23,6 +23,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     void setSlidersInactive() {
         Slider[] children = sliderPanel.GetComponentsInChildren<Slider>();
         foreach (Slider child in children) {
+            child.value = 1.0f;
             child.gameObject.SetActive(false);
         }
     }
@@ -91,5 +92,10 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public void toggleSlider(GameObject slider) {
         bool sliderActive = slider.activeInHierarchy;
         slider.SetActive(!sliderActive);
+    }
+
+    public void zoomFunc(float value) {
+        Vector3 newScale = new Vector3(value, value, value);
+        imageGameObject.GetComponent<Transform>().localScale = newScale;
     }
 }
