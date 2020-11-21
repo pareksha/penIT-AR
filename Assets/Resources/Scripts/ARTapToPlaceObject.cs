@@ -26,7 +26,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
             if (child.name == "ZoomSlider")
                 child.value = 1.0f;
             else if (child.name == "TransparencySlider")
-                child.value = 100.0f;
+                child.value = 1.0f;
             else if (child.name == "RotateSlider")
                 child.value = 0.0f;
             child.gameObject.SetActive(false);
@@ -109,5 +109,16 @@ public class ARTapToPlaceObject : MonoBehaviour {
         Quaternion newRotation = new Quaternion();
         newRotation.eulerAngles = new Vector3(rot.x, value, rot.z);
         imageGameObject.GetComponent<Transform>().rotation = newRotation;
+    }
+
+    private void changeAlpha(Material mat, float alphaVal) {
+        Color oldColor = mat.color;
+        Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
+        mat.SetColor("_Color", newColor);
+    }
+
+    public void transparencyFunc(float value) {
+        Material mat = imageGameObject.transform.GetChild(0).GetComponent<Renderer>().material;
+        changeAlpha(mat, value);
     }
 }
