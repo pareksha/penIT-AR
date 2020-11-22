@@ -12,6 +12,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public GameObject objectToPlace;
     public GameObject navbarBottom;
     public GameObject sliderPanel;
+    public GameObject infoPanel;
 
     private ARRaycastManager raycastManager;
     private Pose placementPose;
@@ -19,6 +20,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private bool imagePlaced = false;
     private GameObject imageGameObject;
     private int templateid = ChangeTemplate.templateId;
+    private static bool showInfo = true;
 
     private void changeAlpha(Material mat, float alphaVal) {
         Color oldColor = mat.color;
@@ -43,6 +45,13 @@ public class ARTapToPlaceObject : MonoBehaviour {
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
         setSlidersInactive();
+        Debug.Log(showInfo);
+        if (showInfo) {
+            infoPanel.SetActive(true);
+            showInfo = false;
+        } else {
+            infoPanel.SetActive(false);
+        }
         changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 1);
     }
 
@@ -101,6 +110,10 @@ public class ARTapToPlaceObject : MonoBehaviour {
 
     public void loadGallery() {
         SceneManager.LoadScene("GalleryScene");
+    }
+
+    public void toggleInfo() {
+        infoPanel.SetActive(!infoPanel.activeSelf);
     }
 
     public void toggleSlider(GameObject slider) {
