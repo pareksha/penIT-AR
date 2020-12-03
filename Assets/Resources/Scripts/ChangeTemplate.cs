@@ -7,7 +7,6 @@ public class ChangeTemplate : MonoBehaviour
 {
     public static int templateId = 3;
 
-    // Start is called before the first frame update
     public void templateChange(int id){
     	templateId = id;
     	SceneManager.LoadScene("ARScene");

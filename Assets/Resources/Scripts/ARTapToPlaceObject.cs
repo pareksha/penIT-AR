@@ -6,8 +6,9 @@ using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using Object = UnityEngine.Object;
+
 public class ARTapToPlaceObject : MonoBehaviour {
-    public Texture[] textures;
     public GameObject placementIndicator;
     public GameObject objectToPlace;
     public GameObject navbarBottom;
@@ -19,8 +20,9 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private bool placementPoseIsValid = false;
     private bool imagePlaced = false;
     private GameObject imageGameObject;
-    private int templateid = ChangeTemplate.templateId;
     private static bool showInfo = true;
+    private Object[] galleryTextures;
+
 
     private void changeAlpha(Material mat, float alphaVal) {
         Color oldColor = mat.color;
@@ -41,7 +43,12 @@ public class ARTapToPlaceObject : MonoBehaviour {
         }
     }
 
+    private void initialiseTextures() {
+        galleryTextures = Resources.LoadAll("Gallery", typeof(Texture));
+    }
+
     void Start() {
+        initialiseTextures();
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
         setSlidersInactive();
@@ -68,8 +75,9 @@ public class ARTapToPlaceObject : MonoBehaviour {
     }
 
     private void PlaceObject() {
-        templateid = ChangeTemplate.templateId;
-        objectToPlace.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = textures[templateid];
+        int templateid = ChangeTemplate.templateId;
+        Texture selectedGalleryTexture = (Texture)galleryTextures[templateid];
+        objectToPlace.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = selectedGalleryTexture;
         // GetComponent<Renderer>().material.mainTexture = textures[templateid];
         imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
     }
