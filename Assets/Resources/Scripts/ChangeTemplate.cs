@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class ChangeTemplate : MonoBehaviour
 {
-    public static int templateId = 3;
+    public static Texture2D templateTex;
 
-    public static void templateChange(int id){
-    	templateId = id;
+    public static void templateChange(Texture2D tex){
+    	templateTex = tex;
     	SceneManager.LoadScene("ARScene");
     }
 }

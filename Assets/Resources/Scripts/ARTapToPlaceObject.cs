@@ -21,8 +21,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private bool imagePlaced = false;
     private GameObject imageGameObject;
     private static bool showInfo = true;
-    private Object[] galleryTextures;
-
+    private static bool templateSet = false;
 
     private void changeAlpha(Material mat, float alphaVal) {
         Color oldColor = mat.color;
@@ -43,12 +42,14 @@ public class ARTapToPlaceObject : MonoBehaviour {
         }
     }
 
-    private void initialiseTextures() {
-        galleryTextures = Resources.LoadAll("Gallery", typeof(Texture));
+    private void setDefaultTemplate() {
+        if(!templateSet) {
+            ChangeTemplate.templateTex = (Texture2D)Resources.LoadAll("Gallery", typeof(Texture2D))[3];
+            templateSet = true;
+        }
     }
 
     void Start() {
-        initialiseTextures();
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
         setSlidersInactive();
@@ -60,6 +61,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
             infoPanel.SetActive(false);
         }
         changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 1);
+        setDefaultTemplate();
     }
 
     void Update() {
@@ -75,10 +77,8 @@ public class ARTapToPlaceObject : MonoBehaviour {
     }
 
     private void PlaceObject() {
-        int templateid = ChangeTemplate.templateId;
-        Texture selectedGalleryTexture = (Texture)galleryTextures[templateid];
+        Texture2D selectedGalleryTexture = ChangeTemplate.templateTex;
         objectToPlace.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = selectedGalleryTexture;
-        // GetComponent<Renderer>().material.mainTexture = textures[templateid];
         imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
     }
 

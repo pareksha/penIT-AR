@@ -9,7 +9,6 @@ public class CreateGallery : MonoBehaviour {
     public GameObject galleryBtnPrefab;
 
     void Start() {
-        int id = 0;
         Object[] galleryImages = Resources.LoadAll("Gallery", typeof(Texture2D));
         foreach (Object img in galleryImages) {
 
@@ -28,10 +27,8 @@ public class CreateGallery : MonoBehaviour {
             Sprite currSprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
             btnPrefab.transform.GetChild(0).GetComponent<Image>().sprite = currSprite;
 
-            // Changing templateId in onclick
-            int tempid = id;
-            btnPrefab.GetComponent<Button>().onClick.AddListener(() => ChangeTemplate.templateChange(tempid));
-            id += 1;
+            // Changing template texture in onclick
+            btnPrefab.GetComponent<Button>().onClick.AddListener(() => ChangeTemplate.templateChange(tex));
         }
     }
 
