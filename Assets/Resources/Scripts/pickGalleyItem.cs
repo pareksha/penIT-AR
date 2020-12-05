@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class pickGalleyItem : MonoBehaviour
-{
+{	
+	public GameObject ImageViewer;
+
     public void pickMedia()
 	{
-		PickImage( 500 );
+		PickImage( 3000 );
 	}
 
 	public void clickImage(){
@@ -28,23 +31,22 @@ public class pickGalleyItem : MonoBehaviour
 					return;
 				}
 
-				// Assign texture to a temporary quad and destroy it after 5 seconds
-				GameObject quad = GameObject.CreatePrimitive( PrimitiveType.Quad );
-				quad.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2.5f;
-				quad.transform.forward = Camera.main.transform.forward;
-				quad.transform.localScale = new Vector3( 1f, texture.height / (float) texture.width, 1f );
+				// Creating button prefab in scroll view content
+				GameObject canvas = GameObject.Find("/Canvas");
+	            GameObject viewer = (GameObject)Instantiate(ImageViewer, canvas.transform);
+	            
+	            // viewer.transform.position = canvas.transform.position;
+	            viewer.GetComponent<RectTransform>().SetParent(canvas.transform);
+	            Debug.Log("Fuck");
+	            Debug.Log(viewer);
+	            // Correcting scale
+	            Vector3 newScale = new Vector3(1.0f, 1.0f, 1.0f);
+	            viewer.GetComponent<Transform>().localScale = newScale;
 
-				Material material = quad.GetComponent<Renderer>().material;
-				if( !material.shader.isSupported ) // happens when Standard shader is not included in the build
-					material.shader = Shader.Find( "Legacy Shaders/Diffuse" );
-
-				material.mainTexture = texture;
-
-				Destroy( quad, 5f );
-
-				// If a procedural texture is not destroyed manually, 
-				// it will only be freed after a scene change
-				Destroy( texture, 5f );
+	            // Add sprite as an image in instantiated prefab
+	            Texture2D tex = (Texture2D)texture;
+	            Sprite currSprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+	            viewer.transform.GetChild(0).GetComponent<Image>().sprite = currSprite;
 			}
 		}, "Select a PNG image", "image/png" );
 
