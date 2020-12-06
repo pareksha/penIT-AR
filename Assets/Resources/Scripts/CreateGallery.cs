@@ -7,6 +7,7 @@ using Object = UnityEngine.Object;
 
 public class CreateGallery : MonoBehaviour {
     public GameObject galleryBtnPrefab;
+    public string[] templateDir;
 
     void Start() {
         Object[] galleryImages = Resources.LoadAll("Gallery", typeof(Texture2D));
