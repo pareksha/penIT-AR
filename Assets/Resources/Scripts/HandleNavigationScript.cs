@@ -7,8 +7,16 @@ using UnityEngine.EventSystems;
 public class HandleNavigationScript : MonoBehaviour, IPointerClickHandler
 {
 	private int prevSceneToLoad;
+	public bool menu_visible = false;
 
-	void handleNavigation(){
+	public GameObject Menu;
+	private GameObject menu;
+
+	public void handleNavigation(){
+		if(menu_visible){
+			hideMenu();
+			return;
+		}
 		if(prevSceneToLoad>=0){
     		SceneManager.LoadScene(prevSceneToLoad);
     	}else{
@@ -30,5 +38,25 @@ public class HandleNavigationScript : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData){
     	handleNavigation();
+    }
+
+    private void showMenu(){
+    	GameObject canvas = GameObject.Find("/Canvas");
+    	menu = (GameObject)Instantiate(Menu, canvas.transform);
+    	menu.GetComponent<RectTransform>().SetParent(canvas.transform);
+    	menu_visible = true;
+    }
+
+    private void hideMenu(){
+    	Destroy(menu);
+    	menu_visible = false;
+    }
+
+    public void handleMenu(){
+    	if(menu_visible){
+    		hideMenu();
+    	}else{
+    		showMenu();
+    	}
     }
 }
