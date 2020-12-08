@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 202885306}
   - component: {fileID: 202885305}
   m_Layer: 5
-  m_Name: PhoneGallery
+  m_Name: Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

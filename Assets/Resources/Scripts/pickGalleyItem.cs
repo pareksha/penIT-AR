@@ -6,6 +6,21 @@ using UnityEngine.UI;
 public class pickGalleyItem : MonoBehaviour
 {	
 	public GameObject ImageViewer;
+	public GameObject viewer;
+	
+	// uncomment for testing on play button
+	// void Start(){
+	// 	GameObject canvas = GameObject.Find("/Canvas");
+ //        viewer = (GameObject)Instantiate(ImageViewer, canvas.transform);
+        
+ //        // viewer.transform.position = canvas.transform.position;
+ //        viewer.GetComponent<RectTransform>().SetParent(canvas.transform);
+ //        Debug.Log("Fuck");
+ //        Debug.Log(viewer);
+ //        // Correcting scale
+ //        Vector3 newScale = new Vector3(1.0f, 1.0f, 1.0f);
+ //        viewer.GetComponent<Transform>().localScale = newScale;
+	// }
 
     public void pickMedia()
 	{	
@@ -33,7 +48,7 @@ public class pickGalleyItem : MonoBehaviour
 
 				// Creating button prefab in scroll view content
 				GameObject canvas = GameObject.Find("/Canvas");
-	            GameObject viewer = (GameObject)Instantiate(ImageViewer, canvas.transform);
+	            viewer = (GameObject)Instantiate(ImageViewer, canvas.transform);
 	            
 	            // viewer.transform.position = canvas.transform.position;
 	            viewer.GetComponent<RectTransform>().SetParent(canvas.transform);
@@ -70,7 +85,7 @@ public class pickGalleyItem : MonoBehaviour
 
 				// Creating button prefab in scroll view content
 				GameObject canvas = GameObject.Find("/Canvas");
-	            GameObject viewer = (GameObject)Instantiate(ImageViewer, canvas.transform);
+	            viewer = (GameObject)Instantiate(ImageViewer, canvas.transform);
 	            
 	            // viewer.transform.position = canvas.transform.position;
 	            viewer.GetComponent<RectTransform>().SetParent(canvas.transform);
@@ -88,5 +103,9 @@ public class pickGalleyItem : MonoBehaviour
 		}, maxSize );
 
 		Debug.Log( "Permission result: " + permission );
+	}
+
+	public void hideImageViewer(){
+		Destroy(viewer);
 	}
 }
