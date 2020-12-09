@@ -279,8 +279,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49ff3afafbfdcb646bc226fc4b102fb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu_visible: 0
   Menu: {fileID: 3960015710953651084, guid: c19845341b113e540822ddc8be3d0b70, type: 3}
+  menu_visible: 0
 --- !u!4 &241228228
 Transform:
   m_ObjectHideFlags: 0
@@ -808,7 +808,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -8.5, y: 0}
+  m_AnchoredPosition: {x: -8.5, y: 0.00048828125}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &848203968
@@ -828,7 +828,7 @@ MonoBehaviour:
     m_Right: 100
     m_Top: 50
     m_Bottom: 50
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 850, y: 700}
@@ -958,13 +958,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   galleryBtnPrefab: {fileID: 1280331969147961592, guid: 42ae40c8595e2284495401ce0f8b74ed,
     type: 3}
-  templateDir:
-  - Drawings
-  - Calligraphy
-  - Alphabets
-  - Portraits
-  - LearnToDraw
-  - Custom
+  galleryCategoryBtnPrefab: {fileID: 534436805866156170, guid: 5ce056228494b1b4e885835aa81e18e4,
+    type: 3}
 --- !u!4 &941945873
 Transform:
   m_ObjectHideFlags: 0

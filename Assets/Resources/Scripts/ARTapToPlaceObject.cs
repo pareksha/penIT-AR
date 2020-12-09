@@ -6,8 +6,6 @@ using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-using Object = UnityEngine.Object;
-
 public class ARTapToPlaceObject : MonoBehaviour {
     public GameObject placementIndicator;
     public GameObject objectToPlace;
@@ -43,8 +41,8 @@ public class ARTapToPlaceObject : MonoBehaviour {
     }
 
     private void setDefaultTemplate() {
-        if(!templateSet) {
-            ChangeTemplate.templateTex = (Texture2D)Resources.LoadAll("Gallery", typeof(Texture2D))[3];
+        if (!templateSet) {
+            ChangeTemplate.templateTex = (Texture2D)Resources.LoadAll("Gallery", typeof(Texture2D))[0];
             templateSet = true;
         }
     }
