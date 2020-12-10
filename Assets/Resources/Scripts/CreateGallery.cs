@@ -10,10 +10,13 @@ public class CreateGallery : MonoBehaviour {
     public GameObject galleryBtnPrefab;
     public GameObject galleryCategoryBtnPrefab;
     public static string selectedCategory = "";
+    public GameObject noImageFoundText;
 
     private GameObject[] templateBtnPrefabs;
 
     private void instantiateTemplateCategoryPrefabs() {
+        noImageFoundText.SetActive(false);
+
         // Change Content call Size
         GameObject content = GameObject.Find("/Canvas/Scroll View/Viewport/Content");
         content.GetComponent<GridLayoutGroup>().cellSize = new Vector2(850, 850);
@@ -59,9 +62,14 @@ public class CreateGallery : MonoBehaviour {
         GameObject content = GameObject.Find("/Canvas/Scroll View/Viewport/Content");
         content.GetComponent<GridLayoutGroup>().cellSize = new Vector2(850, 700);
 
-        // Create prefabs of selected category
+        // Gather templates of selected category
         Object[] galleryImages = Resources.LoadAll("Gallery/" + templateCategoryName, typeof(Texture2D));
         Array.Resize(ref templateBtnPrefabs, galleryImages.Length);
+        if (galleryImages.Length == 0) {
+            noImageFoundText.SetActive(true);
+        }
+
+        // Create prefabs of selected category
         int count = 0;
         foreach (Object img in galleryImages) {
 
