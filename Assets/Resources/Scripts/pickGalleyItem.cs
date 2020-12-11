@@ -7,6 +7,7 @@ public class pickGalleyItem : MonoBehaviour
 {	
 	public GameObject ImageViewer;
 	public GameObject viewer;
+	public static string image_path;
 	
 	// uncomment for testing on play button
 	// void Start(){
@@ -33,13 +34,15 @@ public class pickGalleyItem : MonoBehaviour
 
 	private void PickImage( int maxSize )
 	{
+		bool markTextureNonReadable = false;
 		NativeGallery.Permission permission = NativeGallery.GetImageFromGallery( ( path ) =>
 		{
 			Debug.Log( "Image path: " + path );
+			image_path = path;
 			if( path != null )
 			{
 				// Create Texture from selected image
-				Texture2D texture = NativeGallery.LoadImageAtPath( path, maxSize );
+				Texture2D texture = NativeCamera.LoadImageAtPath( path, maxSize, markTextureNonReadable);
 				if( texture == null )
 				{
 					Debug.Log( "Couldn't load texture from " + path );
@@ -52,8 +55,6 @@ public class pickGalleyItem : MonoBehaviour
 	            
 	            // viewer.transform.position = canvas.transform.position;
 	            viewer.GetComponent<RectTransform>().SetParent(canvas.transform);
-	            Debug.Log("Fuck");
-	            Debug.Log(viewer);
 	            // Correcting scale
 	            Vector3 newScale = new Vector3(1.0f, 1.0f, 1.0f);
 	            viewer.GetComponent<Transform>().localScale = newScale;
@@ -70,13 +71,15 @@ public class pickGalleyItem : MonoBehaviour
 
 	private void TakePicture( int maxSize )
 	{
+		bool markTextureNonReadable = false;
 		NativeCamera.Permission permission = NativeCamera.TakePicture( ( path ) =>
 		{
 			Debug.Log( "Image path: " + path );
+			image_path = path;
 			if( path != null )
 			{
 				// Create a Texture2D from the captured image
-				Texture2D texture = NativeCamera.LoadImageAtPath( path, maxSize );
+				Texture2D texture = NativeCamera.LoadImageAtPath( path, maxSize, markTextureNonReadable);
 				if( texture == null )
 				{
 					Debug.Log( "Couldn't load texture from " + path );
@@ -89,8 +92,7 @@ public class pickGalleyItem : MonoBehaviour
 	            
 	            // viewer.transform.position = canvas.transform.position;
 	            viewer.GetComponent<RectTransform>().SetParent(canvas.transform);
-	            Debug.Log("Fuck");
-	            Debug.Log(viewer);
+	            
 	            // Correcting scale
 	            Vector3 newScale = new Vector3(1.0f, 1.0f, 1.0f);
 	            viewer.GetComponent<Transform>().localScale = newScale;
