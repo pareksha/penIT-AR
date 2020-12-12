@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.IO;
+using System;
 
 public class ImageViewer : MonoBehaviour
 {
 	GameObject Menu;
 	public pickGalleyItem script;
 	private const string API_KEY = "npRNEKsuRR2jhqYJVysirvrE";
-	public static int id = 0;
+
 	void Start(){
 		Menu = GameObject.Find("Menu(Clone)");
 		// Menu = GameObject.Find("Menu");
@@ -93,13 +94,24 @@ public class ImageViewer : MonoBehaviour
 	}
 
 	public void save_image(){
-		id++;
+		var id = string.Format(@"{0}", DateTime.Now.Ticks);;
 		Texture2D graph = script.viewer.transform.GetChild(0).GetComponent<Image>().sprite.texture as Texture2D;
 		var bytes = graph.EncodeToPNG();
 		string path = Path.Combine(Application.persistentDataPath, "gallery");
 		if(!Directory.Exists(path))
       		Directory.CreateDirectory(path);
-        System.IO.File.WriteAllBytes(Path.Combine(path,"template" + id + ".png"), bytes);
+      	Debug.Log(path);
+        System.IO.File.WriteAllBytes(Path.Combine(path,"template_" + id + ".png"), bytes);
         hideImageViewer();
+	}
+
+	public void load_custom_gallery(){
+		int maxSize = 3000;
+		string path = Path.Combine(Application.persistentDataPath, "gallery");
+		string name_of_file = "";
+		Texture2D texture = NativeCamera.LoadImageAtPath(Path.Combine(path, name_of_file), maxSize);
+    	// Add sprite as an image in instantiated prefab
+        Texture2D tex = (Texture2D)texture;
+        Sprite currSprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
 	}
 }
