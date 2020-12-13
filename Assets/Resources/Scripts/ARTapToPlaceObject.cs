@@ -40,18 +40,27 @@ public class ARTapToPlaceObject : MonoBehaviour {
         }
     }
 
+    private void scaleImageQuad() {
+        float pixelCountForOneUnit = Screen.height * 0.5f / Camera.main.orthographicSize;
+        float scaleX = ChangeTemplate.templateTex.width / pixelCountForOneUnit;
+        float scaleY = ChangeTemplate.templateTex.height / pixelCountForOneUnit;
+
+        Vector3 scale = new Vector3(scaleX, scaleY, 1.0f);
+        objectToPlace.transform.GetChild(0).GetComponent<Transform>().localScale = scale;
+    }
+
     private void setDefaultTemplate() {
         if (!templateSet) {
             ChangeTemplate.templateTex = (Texture2D)Resources.LoadAll("Gallery", typeof(Texture2D))[0];
             templateSet = true;
         }
+        scaleImageQuad();
     }
 
     void Start() {
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
         setSlidersInactive();
-        Debug.Log(showInfo);
         if (showInfo) {
             infoPanel.SetActive(true);
             showInfo = false;
@@ -77,6 +86,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private void PlaceObject() {
         Texture2D selectedGalleryTexture = ChangeTemplate.templateTex;
         objectToPlace.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = selectedGalleryTexture;
+        scaleImageQuad();
         imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
     }
 
