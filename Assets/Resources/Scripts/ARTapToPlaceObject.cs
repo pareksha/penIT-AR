@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -126,9 +127,23 @@ public class ARTapToPlaceObject : MonoBehaviour {
         }
     }
 
+    IEnumerator loadSceneAsync() {
+        yield return null;
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("GalleryScene");
+        asyncOperation.allowSceneActivation = false;
+        while (!asyncOperation.isDone) {
+            // Check if the load has finished
+            if (asyncOperation.progress >= 0.9f) {
+                // Activate the Scene
+                asyncOperation.allowSceneActivation = true;
+            }
+            yield return null;
+        }
+    }
+
     public void loadGallery() {
         loadingPanel.SetActive(true);
-        SceneManager.LoadScene("GalleryScene");
+        StartCoroutine(loadSceneAsync());
     }
 
     public void toggleInfo() {
