@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 using Object = UnityEngine.Object;
 
@@ -63,7 +65,12 @@ public class CreateGallery : MonoBehaviour {
         content.GetComponent<GridLayoutGroup>().cellSize = new Vector2(850, 700);
 
         // Gather templates of selected category
-        Object[] galleryImages = Resources.LoadAll("Gallery/" + templateCategoryName, typeof(Texture2D));
+        Object[] galleryImages;
+        if (templateCategoryName == "User Added") {
+            galleryImages = loadUserAddedTemplates();
+        } else
+            galleryImages = Resources.LoadAll("Gallery/" + templateCategoryName, typeof(Texture2D));
+
         Array.Resize(ref templateBtnPrefabs, galleryImages.Length);
         if (galleryImages.Length == 0) {
             noImageFoundText.SetActive(true);
@@ -103,6 +110,19 @@ public class CreateGallery : MonoBehaviour {
             Destroy(btnPrefab);
         }
         Array.Resize(ref templateBtnPrefabs, 0);
+    }
+
+    public Object[] loadUserAddedTemplates() {
+        int maxSize = 1000;
+        string galleryPath = Path.Combine(Application.persistentDataPath, "gallery");
+        string[] filenames = Directory.GetFiles(galleryPath, "*.png");
+        Debug.Log(filenames.Length);
+        Object[] customImages = new Object[filenames.Length];
+        int id = 0;
+        foreach (string filename in filenames) {
+            customImages[id++] = NativeCamera.LoadImageAtPath(Path.Combine(galleryPath, filename), maxSize);
+        }
+        return customImages;
     }
 
     // For navigation purposes
