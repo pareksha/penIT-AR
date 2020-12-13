@@ -12,6 +12,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public GameObject navbarBottom;
     public GameObject sliderPanel;
     public GameObject infoPanel;
+    public GameObject loadingPanel;
 
     private ARRaycastManager raycastManager;
     private Pose placementPose;
@@ -60,6 +61,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     void Start() {
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
+        loadingPanel.SetActive(false);
         setSlidersInactive();
         if (showInfo) {
             infoPanel.SetActive(true);
@@ -125,6 +127,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     }
 
     public void loadGallery() {
+        loadingPanel.SetActive(true);
         SceneManager.LoadScene("GalleryScene");
     }
 
