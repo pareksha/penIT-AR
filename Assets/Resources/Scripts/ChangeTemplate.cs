@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ChangeTemplate : MonoBehaviour {
-    public static Texture2D templateTex;
+    public static Texture2D[] templateTex;
 
     IEnumerator loadSceneAsync() {
         yield return null;
@@ -20,7 +20,7 @@ public class ChangeTemplate : MonoBehaviour {
         }
     }
 
-    public static void templateChange(Texture2D tex) {
+    public static void templateChange(Texture2D[] tex) {
         templateTex = tex;
         CreateGallery.selectedCategory = "";
         CreateGallery createGalleryObj = GameObject.Find("CreateGallery").GetComponent<CreateGallery>();

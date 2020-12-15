@@ -56,7 +56,12 @@ public class CreateGallery : MonoBehaviour {
     IEnumerator instantiateTemplatePrefabsFromResources(GameObject content, string templateCategoryName) {
         yield return new WaitForEndOfFrame();
 
-        Object[] galleryImages = Resources.LoadAll("Gallery/" + templateCategoryName, typeof(Texture2D));
+        Object[] galleryImages;
+        if (selectedCategory == "Step By Step Drawing")
+            galleryImages = Resources.LoadAll("Gallery/Step By Step Drawing/Icons", typeof(Texture2D));
+        else
+            galleryImages = Resources.LoadAll("Gallery/" + templateCategoryName, typeof(Texture2D));
+
         Array.Resize(ref templateBtnPrefabs, galleryImages.Length);
 
         yield return new WaitForEndOfFrame();
@@ -125,7 +130,13 @@ public class CreateGallery : MonoBehaviour {
             btnPrefab.GetComponent<Button>().onClick.AddListener(() => instantiateTemplatePrefabs(img.name));
         } else {
             btnPrefab.transform.GetChild(0).GetComponent<Image>().sprite = currSprite;
-            btnPrefab.GetComponent<Button>().onClick.AddListener(() => ChangeTemplate.templateChange(tex));
+            Texture2D[] texarr = new Texture2D[1];
+            if (selectedCategory == "Step By Step Drawing") {
+                Object[] objarr = Resources.LoadAll("Gallery/Step By Step Drawing/" + img.name, typeof(Texture2D));
+                texarr = Array.ConvertAll(objarr, obj => (Texture2D)obj);
+            } else
+                texarr[0] = tex;
+            btnPrefab.GetComponent<Button>().onClick.AddListener(() => ChangeTemplate.templateChange(texarr));
         }
 
         // Add to prefab array

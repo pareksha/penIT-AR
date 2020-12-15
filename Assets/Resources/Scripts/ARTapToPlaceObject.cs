@@ -14,6 +14,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public GameObject sliderPanel;
     public GameObject infoPanel;
     public GameObject loadingPanel;
+    public GameObject multipleImagePanel;
 
     private ARRaycastManager raycastManager;
     private Pose placementPose;
@@ -22,6 +23,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     private GameObject imageGameObject;
     private static bool showInfo = true;
     private static bool templateSet = false;
+    private int currImageIndex = 0;
 
     private void changeAlpha(Material mat, float alphaVal) {
         Color oldColor = mat.color;
@@ -29,14 +31,14 @@ public class ARTapToPlaceObject : MonoBehaviour {
         mat.SetColor("_Color", newColor);
     }
 
-    private void setSlidersInactive() {
+    private void setSlidersInactive(bool resetvalue) {
         Slider[] children = sliderPanel.GetComponentsInChildren<Slider>();
         foreach (Slider child in children) {
-            if (child.name == "ZoomSlider")
+            if (child.name == "ZoomSlider" && resetvalue)
                 child.value = 1.0f;
-            else if (child.name == "TransparencySlider")
+            else if (child.name == "TransparencySlider" && resetvalue)
                 child.value = 1.0f;
-            else if (child.name == "RotateSlider")
+            else if (child.name == "RotateSlider" && resetvalue)
                 child.value = 0.0f;
             child.gameObject.SetActive(false);
         }
@@ -44,8 +46,8 @@ public class ARTapToPlaceObject : MonoBehaviour {
 
     private void scaleImageQuad() {
         float pixelCountForOneUnit = Screen.height * 0.5f / Camera.main.orthographicSize;
-        float scaleX = ChangeTemplate.templateTex.width / pixelCountForOneUnit;
-        float scaleY = ChangeTemplate.templateTex.height / pixelCountForOneUnit;
+        float scaleX = ChangeTemplate.templateTex[0].width / pixelCountForOneUnit;
+        float scaleY = ChangeTemplate.templateTex[0].height / pixelCountForOneUnit;
 
         Vector3 scale = new Vector3(scaleX, scaleY, 1.0f);
         objectToPlace.transform.GetChild(0).GetComponent<Transform>().localScale = scale;
@@ -53,17 +55,27 @@ public class ARTapToPlaceObject : MonoBehaviour {
 
     private void setDefaultTemplate() {
         if (!templateSet) {
-            ChangeTemplate.templateTex = (Texture2D)Resources.LoadAll("Gallery", typeof(Texture2D))[0];
+            ChangeTemplate.templateTex = new Texture2D[1];
+            ChangeTemplate.templateTex[0] = (Texture2D)Resources.LoadAll("Gallery", typeof(Texture2D))[0];
             templateSet = true;
         }
         scaleImageQuad();
+    }
+
+    private void showMultipleImagePanel() {
+        if (ChangeTemplate.templateTex.Length > 1) {
+            multipleImagePanel.SetActive(true);
+            navbarBottom.SetActive(false);
+            setSlidersInactive(false);
+            toggleMultipleImagesButtons();
+        }
     }
 
     void Start() {
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
         loadingPanel.SetActive(false);
-        setSlidersInactive();
+        setSlidersInactive(true);
         if (showInfo) {
             infoPanel.SetActive(true);
             showInfo = false;
@@ -72,6 +84,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
         }
         changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 1);
         setDefaultTemplate();
+        // showMultipleImagePanel();
     }
 
     void Update() {
@@ -87,7 +100,7 @@ public class ARTapToPlaceObject : MonoBehaviour {
     }
 
     private void PlaceObject() {
-        Texture2D selectedGalleryTexture = ChangeTemplate.templateTex;
+        Texture2D selectedGalleryTexture = ChangeTemplate.templateTex[0];
         objectToPlace.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = selectedGalleryTexture;
         scaleImageQuad();
         imageGameObject = Instantiate(objectToPlace, placementPose.position, placementPose.rotation);
@@ -122,8 +135,9 @@ public class ARTapToPlaceObject : MonoBehaviour {
             Destroy(imageGameObject);
             changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 1);
             navbarBottom.SetActive(false);
-            setSlidersInactive();
+            setSlidersInactive(true);
             imagePlaced = false;
+            currImageIndex = 0;
         }
     }
 
@@ -170,5 +184,43 @@ public class ARTapToPlaceObject : MonoBehaviour {
     public void transparencyFunc(float value) {
         Material mat = imageGameObject.transform.GetChild(0).GetComponent<Renderer>().material;
         changeAlpha(mat, value);
+    }
+
+    public void closeBottomNavbar() {
+        navbarBottom.SetActive(false);
+        showMultipleImagePanel();
+    }
+
+    public void multipleImageNextStep() {
+        imageGameObject.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = ChangeTemplate.templateTex[++currImageIndex];
+        toggleMultipleImagesButtons();
+    }
+
+    public void multipleImagePreviousStep() {
+        imageGameObject.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = ChangeTemplate.templateTex[--currImageIndex];
+        toggleMultipleImagesButtons();
+    }
+
+    private void toggleMultipleImagesButtons() {
+        Button[] children = multipleImagePanel.GetComponentsInChildren<Button>(true);
+        foreach (Button child in children) {
+            if (child.name == "NextStepButton") {
+                if (currImageIndex == ChangeTemplate.templateTex.Length - 1)
+                    child.gameObject.SetActive(false);
+                else
+                    child.gameObject.SetActive(true);
+            }
+            if (child.name == "PreviousStepButton") {
+                if (currImageIndex == 0)
+                    child.gameObject.SetActive(false);
+                else
+                    child.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void showBottomNavbar() {
+        multipleImagePanel.SetActive(false);
+        navbarBottom.SetActive(true);
     }
 }
