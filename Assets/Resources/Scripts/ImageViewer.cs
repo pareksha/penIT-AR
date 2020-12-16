@@ -9,6 +9,8 @@ using System;
 public class ImageViewer : MonoBehaviour {
     GameObject Menu;
     public pickGalleyItem script;
+    public GameObject loadingPanel;
+
     private const string API_KEY = "npRNEKsuRR2jhqYJVysirvrE";
 
     void Start() {
@@ -59,21 +61,21 @@ public class ImageViewer : MonoBehaviour {
         return graph;
     }
 
-    public void removeBackground() {
-        Texture2D old_tex = script.viewer.transform.GetChild(0).GetComponent<Image>().sprite.texture as Texture2D;
-        StartCoroutine(upload_image(old_tex));
-        Texture2D new_tex = old_tex;
-
+    public void convert_sketch() {
+        loadingPanel.SetActive(true);
+        StartCoroutine(convert());
     }
 
-    public IEnumerator upload_image(Texture2D texture) {
+    public IEnumerator convert() {
+        yield return new WaitForEndOfFrame();
+        Texture2D texture = script.viewer.transform.GetChild(0).GetComponent<Image>().sprite.texture as Texture2D;
+        yield return new WaitForEndOfFrame();
         WWWForm form = new WWWForm();
         var imageData = texture.EncodeToPNG();
-        form.AddField("size", "auto");
-        form.AddBinaryData("image_file", imageData);
-        UnityWebRequest www = UnityWebRequest.Post("https://api.remove.bg/v1.0/removebg", form);
-        www.SetRequestHeader("X-Api-Key", "npRNEKsuRR2jhqYJVysirvrE");
-        Debug.Log("yupz");
+        yield return new WaitForEndOfFrame();
+        form.AddField("scale", 250);
+        form.AddBinaryData("image", imageData);
+        UnityWebRequest www = UnityWebRequest.Post("https://apisketchup.herokuapp.com/filter/sketch/", form);
         yield return www.SendWebRequest();
         if (www.error != null)
             Debug.Log(www.error);
@@ -85,6 +87,37 @@ public class ImageViewer : MonoBehaviour {
                 script.viewer.transform.GetChild(0).GetComponent<Image>().sprite = currSprite;
             }
         }
+        loadingPanel.SetActive(false);
+    }
+
+    public void removeBackground() {
+        loadingPanel.SetActive(true);
+        StartCoroutine(upload_image());
+    }
+
+    public IEnumerator upload_image() {
+        yield return new WaitForEndOfFrame();
+        Texture2D texture = script.viewer.transform.GetChild(0).GetComponent<Image>().sprite.texture as Texture2D;
+        yield return new WaitForEndOfFrame();
+        WWWForm form = new WWWForm();
+        var imageData = texture.EncodeToPNG();
+        yield return new WaitForEndOfFrame();
+        form.AddField("size", "auto");
+        form.AddBinaryData("image_file", imageData);
+        UnityWebRequest www = UnityWebRequest.Post("https://api.remove.bg/v1.0/removebg", form);
+        www.SetRequestHeader("X-Api-Key", "npRNEKsuRR2jhqYJVysirvrE");
+        yield return www.SendWebRequest();
+        if (www.error != null)
+            Debug.Log(www.error);
+        else {
+            Texture2D Tex2D;
+            Tex2D = new Texture2D(2, 2);
+            if (Tex2D.LoadImage(www.downloadHandler.data)) {
+                Sprite currSprite = Sprite.Create(Tex2D, new Rect(0.0f, 0.0f, Tex2D.width, Tex2D.height), new Vector2(0.5f, 0.5f), 100.0f);
+                script.viewer.transform.GetChild(0).GetComponent<Image>().sprite = currSprite;
+            }
+        }
+        loadingPanel.SetActive(false);
     }
 
     public void save_image() {

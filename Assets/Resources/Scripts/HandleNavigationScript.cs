@@ -56,10 +56,6 @@ public class HandleNavigationScript : MonoBehaviour, IPointerClickHandler {
     }
 
     public void handleMenu() {
-        if (menu_visible) {
-            hideMenu();
-        } else {
-            showMenu();
-        }
+        showMenu();
     }
 }

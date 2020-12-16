@@ -25,11 +25,11 @@ public class pickGalleyItem : MonoBehaviour
 
     public void pickMedia()
 	{	
-		PickImage( 3000 );
+		PickImage( 1000 );
 	}
 
 	public void clickImage(){
-		TakePicture( 3000 );
+		TakePicture( 1000 );
 	}
 
 	private void PickImage( int maxSize )
@@ -109,5 +109,11 @@ public class pickGalleyItem : MonoBehaviour
 
 	public void hideImageViewer(){
 		Destroy(viewer);
+	}
+
+	public void hide_menu(){
+		Debug.Log("asdjandsja");
+		GameObject Menu = GameObject.Find("Menu(Clone)");
+		Destroy(Menu);
 	}
 }
