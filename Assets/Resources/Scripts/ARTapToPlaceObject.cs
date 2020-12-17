@@ -62,15 +62,6 @@ public class ARTapToPlaceObject : MonoBehaviour {
         scaleImageQuad();
     }
 
-    private void showMultipleImagePanel() {
-        if (ChangeTemplate.templateTex.Length > 1) {
-            multipleImagePanel.SetActive(true);
-            navbarBottom.SetActive(false);
-            setSlidersInactive(false);
-            toggleMultipleImagesButtons();
-        }
-    }
-
     void Start() {
         raycastManager = FindObjectOfType<ARRaycastManager>();
         navbarBottom.SetActive(false);
@@ -84,7 +75,6 @@ public class ARTapToPlaceObject : MonoBehaviour {
         }
         changeAlpha(placementIndicator.transform.GetChild(0).GetComponent<Renderer>().material, 1);
         setDefaultTemplate();
-        // showMultipleImagePanel();
     }
 
     void Update() {
@@ -186,9 +176,15 @@ public class ARTapToPlaceObject : MonoBehaviour {
         changeAlpha(mat, value);
     }
 
-    public void closeBottomNavbar() {
+    public void showMultipleImagePanel() {
+        multipleImagePanel.SetActive(true);
         navbarBottom.SetActive(false);
-        showMultipleImagePanel();
+        setSlidersInactive(false);
+        if (ChangeTemplate.templateTex.Length > 1) {
+            toggleMultipleImagesButtons();
+        } else {
+            showOnlyOptionsMenu();
+        }
     }
 
     public void multipleImageNextStep() {
@@ -215,6 +211,17 @@ public class ARTapToPlaceObject : MonoBehaviour {
                     child.gameObject.SetActive(false);
                 else
                     child.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void showOnlyOptionsMenu() {
+        Button[] children = multipleImagePanel.GetComponentsInChildren<Button>(true);
+        foreach (Button child in children) {
+            if (child.name == "OptionsButton") {
+                child.gameObject.SetActive(true);
+            } else {
+                child.gameObject.SetActive(false);
             }
         }
     }

@@ -81,7 +81,13 @@ public class CreateGallery : MonoBehaviour {
         yield return new WaitForEndOfFrame();
 
         string galleryPath = Path.Combine(Application.persistentDataPath, "gallery");
-        string[] filenames = Directory.GetFiles(galleryPath, "*.png");
+        string[] filenames;
+        try {
+            filenames = Directory.GetFiles(galleryPath, "*.png");
+        } catch (Exception DirectoryNotFoundException) {
+            filenames = new string[0];
+        }
+        
         Array.Resize(ref templateBtnPrefabs, filenames.Length);
 
         yield return new WaitForEndOfFrame();
