@@ -11,19 +11,30 @@ public class HandleNavigationScript : MonoBehaviour, IPointerClickHandler {
     private int prevSceneToLoad;
     private GameObject menu;
 
+    private bool check_warning(){
+    	GameObject clone = GameObject.Find("Message(Clone)");
+    	if(clone){
+    		return true;
+    	}
+    	return false;
+    }
+
+    private void show_warning(){
+    	SSTools.ShowMessage("Press back again to exit!", SSTools.Position.bottom, SSTools.Time.twoSecond);
+    }
+
     public void handleNavigation() {
         if (SceneManager.GetActiveScene().name == "GalleryScene" && CreateGallery.selectedCategory != "") {
             CreateGallery.inGalleryNavigation();
             return;
         }
-        if (menu_visible) {
-            hideMenu();
-            return;
-        }
         if (prevSceneToLoad >= 0) {
             SceneManager.LoadScene(prevSceneToLoad);
-        } else {
-            Application.Quit();
+        } else if(!check_warning()){
+        	show_warning();
+        }else{
+        	if(check_warning())
+	            Application.Quit();
         }
     }
 
