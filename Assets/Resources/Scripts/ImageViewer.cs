@@ -77,11 +77,10 @@ public class ImageViewer : MonoBehaviour {
         form.AddBinaryData("image", imageData);
         UnityWebRequest www = UnityWebRequest.Post("https://apisketchup.herokuapp.com/filter/sketch/", form);
         yield return www.SendWebRequest();
-        if (www.error != null){
+        if (www.error != null) {
             Debug.Log(www.error);
             Debug.Log(www.downloadHandler.text);
-        }
-        else {
+        } else {
             Texture2D Tex2D;
             Tex2D = new Texture2D(2, 2);
             if (Tex2D.LoadImage(www.downloadHandler.data)) {
@@ -109,10 +108,9 @@ public class ImageViewer : MonoBehaviour {
         UnityWebRequest www = UnityWebRequest.Post("https://api.remove.bg/v1.0/removebg", form);
         www.SetRequestHeader("X-Api-Key", "npRNEKsuRR2jhqYJVysirvrE");
         yield return www.SendWebRequest();
-        if (www.error != null){
+        if (www.error != null) {
             SSTools.ShowMessage("Foreground missing " + www.error, SSTools.Position.top, SSTools.Time.threeSecond);
-        }
-        else {
+        } else {
             Texture2D Tex2D;
             Tex2D = new Texture2D(2, 2);
             if (Tex2D.LoadImage(www.downloadHandler.data)) {
@@ -133,5 +131,10 @@ public class ImageViewer : MonoBehaviour {
         Debug.Log(path);
         System.IO.File.WriteAllBytes(Path.Combine(path, "template_" + id + ".png"), bytes);
         hideImageViewer();
+
+        // Go to AR scene with the new image
+        Texture2D[] texarr = new Texture2D[1];
+        texarr[0] = graph;
+        ChangeTemplate.templateChange(texarr);
     }
 }
