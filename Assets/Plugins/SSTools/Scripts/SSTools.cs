@@ -13,7 +13,8 @@ public class SSTools : MonoBehaviour {
     public enum Position
     {
         top,
-        bottom
+        bottom,
+        top_bottom
     };
     public static void ShowMessage ( string msg, SSTools.Position position, SSTools.Time time )
     {
@@ -44,11 +45,17 @@ public class SSTools : MonoBehaviour {
             rectTransform.anchorMax = new Vector2 ( 0.5f, 1f );
             rectTransform.anchoredPosition = new Vector3 ( 0.5f, -100f, 0 );
         }
-        else
+        else if(position == Position.bottom)
         {
             rectTransform.anchorMin = new Vector2 ( 0.5f, 0 );
             rectTransform.anchorMax = new Vector2 ( 0.5f, 0 );
             rectTransform.anchoredPosition = new Vector3 ( 0.5f, 100f, 0 );
+        }
+        else 
+        {
+            rectTransform.anchorMin = new Vector2 ( 0.5f, 0 );
+            rectTransform.anchorMax = new Vector2 ( 0.5f, 0 );
+            rectTransform.anchoredPosition = new Vector3 ( 0.5f, 150f, 0 );
         }
     }
 

@@ -109,7 +109,7 @@ public class ImageViewer : MonoBehaviour {
         www.SetRequestHeader("X-Api-Key", "npRNEKsuRR2jhqYJVysirvrE");
         yield return www.SendWebRequest();
         if (www.error != null) {
-            SSTools.ShowMessage("Foreground missing " + www.error, SSTools.Position.top, SSTools.Time.threeSecond);
+            SSTools.ShowMessage("Foreground is missing.", SSTools.Position.top_bottom, SSTools.Time.threeSecond);
         } else {
             Texture2D Tex2D;
             Tex2D = new Texture2D(2, 2);
